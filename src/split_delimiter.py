@@ -7,21 +7,17 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         if elem.text_type != text_type_enum.type_text:
             new_nodes.append(elem)
             continue
-        new_text = ""
         split_nodes = []
-        if delimiter in elem.text:
-            new_text = elem.text.split(delimiter)
-            if len(new_text) % 2 == 0:
-                raise ValueError("Invalid Markdown syntax, must close delimiter")
-            for i in range(0, len(new_text)):
-                if new_text[i] == "":
-                    continue
-                if i%2 != 0:
-                    split_nodes.append(TextNode(new_text[i], text_type))
-                else:
-                    split_nodes.append(TextNode(new_text[i], text_type_enum.type_text))
-        else:
-            raise Exception("Delimiter not found in text")
+        new_text = elem.text.split(delimiter)
+        if len(new_text) % 2 == 0:
+            raise ValueError("Invalid Markdown syntax, must close delimiter")
+        for i in range(0, len(new_text)):
+            if new_text[i] == "":
+                continue
+            if i%2 != 0:
+                split_nodes.append(TextNode(new_text[i], text_type))
+            else:
+                split_nodes.append(TextNode(new_text[i], text_type_enum.type_text))
         new_nodes.extend(split_nodes)
     return new_nodes
 
@@ -78,3 +74,12 @@ def split_nodes_link(old_nodes):
         if og_text != "":
             new_nodes.append(TextNode(og_text, text_type_enum.type_text))
     return new_nodes
+
+def text_to_textnodes(text):
+    nodes = [TextNode(text, text_type_enum.type_text)]
+    nodes = split_nodes_delimiter(nodes, "**", text_type_enum.type_bold)
+    nodes = split_nodes_delimiter(nodes, "*", text_type_enum.type_italic)
+    nodes = split_nodes_delimiter(nodes, "`", text_type_enum.type_code)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    return nodes
