@@ -159,5 +159,16 @@ this is paragraph text
             "<div><blockquote>This is a blockquote block</blockquote><p>this is paragraph text</p></div>",
         )
 
+class testExtractTitle(unittest.TestCase):
+    def test_basic(self):
+        markdown = "# Hello world"
+        title = extract_title(markdown)
+        self.assertEqual(title, "Hello world")
+
+    def test_multi_line(self):
+        markdown = "# Hello world\nHow are you doing today?"
+        title = extract_title(markdown)
+        self.assertEqual(title, "Hello world")
+
 if __name__ == "__main__":
     unittest.main()

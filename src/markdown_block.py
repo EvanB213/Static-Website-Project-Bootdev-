@@ -139,3 +139,10 @@ def order_list_to_node(block):
         child_nodes = text_to_child(text)
         html_items.append(ParentNode("li", child_nodes))
     return ParentNode("ol", html_items)
+
+def extract_title(markdown):
+    if not markdown.startswith("# "):
+        raise ValueError("Invalid header format")
+    temp = markdown.split("\n")
+    title = temp[0].strip("#").strip()
+    return title
