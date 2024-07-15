@@ -1,6 +1,6 @@
 import os
 import shutil
-from copydir import copy_dir, generate_page
+from copydir import copy_dir, generate_page_recursive
 
 dir_public = "./public"
 dir_static = "./static"
@@ -16,6 +16,6 @@ def main():
     copy_dir(dir_static, dir_public)
 
     print("Generating page")
-    generate_page(os.path.join(dir_content, "index.md"), template_path, os.path.join(dir_public, "index.html"))  
+    generate_page_recursive(dir_content, template_path, dir_public)  
 
 main()

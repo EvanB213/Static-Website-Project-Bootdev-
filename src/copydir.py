@@ -2,6 +2,7 @@ import shutil
 import os
 
 from markdown_block import *
+from pathlib import Path
 
 def copy_dir(source_dir, dest_dir):
     if not os.path.exists(dest_dir):
@@ -40,4 +41,11 @@ def generate_page(from_path, template_path, dest_path):
     to_file.write(template)
 
 def generate_page_recursive(dir_path_content, template_path, dest_dir_path):
-    pass
+    for file in os.listdir(dir_path_content):
+        from_path = os.path.join(dir_path_content, file)
+        dest_path = os.path.join(dest_dir_path, file)
+        if os.path.isfile(from_path):
+            dest_path = Path(dest_path).with_suffix(".html")
+            generate_page(from_path, template_path, dest_path)
+        else:
+            generate_page_recursive(from_path, template_path, dest_path)
